@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="ReportRestPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.mim.model.Actividades</class>
+        <class>com.mim.model.Trabajo</class>
+        <class>com.mim.model.Usuario2</class>
+        <class>com.mim.model.Reporte2</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>    
+          
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.5.254.2:3306/mimservice"/>
+            <property name="javax.persistence.jdbc.user" value="adminEECyvFE"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.password" value="CynDeNreiS4d"/>
+        </properties>
+    </persistence-unit>
+</persistence>
