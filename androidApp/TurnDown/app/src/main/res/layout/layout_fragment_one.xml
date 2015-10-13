@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/firstLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/trabajoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/jobTitle"
+            android:textSize="32sp" />
+
+        <EditText
+            android:id="@+id/jobField"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="escribe trabajo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/secondLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstLayout"
+        android:layout_margin="7sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/siteLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/trabajoLabel"
+            android:text="@string/sitioLabel"
+            android:textSize="32sp" />
+
+        <EditText
+            android:id="@+id/sitioField"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="escribe sitio" />
+
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/jobList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/secondLayout"
+        android:layout_margin="7sp">
+
+    </ExpandableListView>
+
+</RelativeLayout>

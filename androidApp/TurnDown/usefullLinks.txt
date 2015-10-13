@@ -1,0 +1,13 @@
+http://www.javamex.com/tutorials/graphics/bufferedimage_save_png_jpeg.shtml
+
+http://stackoverflow.com/questions/14858321/jax-rs-accept-images-as-input
+
+
+http://stackoverflow.com/questions/12674064/how-to-save-a-bufferedimage-as-a-file
+
+
+
+http://stackoverflow.com/questions/27859956/jersey-image-upload-client
+
+
+80

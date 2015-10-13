@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+
+        <item
+            android:id="@+id/generate_report"
+            android:checked="true"
+            android:icon="@drawable/report_icon"
+            android:title="Generar reporte" />
+
+        <item
+            android:id="@+id/pending_report"
+            android:icon="@drawable/pendientes_icono"
+            android:title="Pendientes" />
+
+        <item
+            android:id="@+id/delivered_report"
+            android:icon="@drawable/enviados_icono"
+            android:title="Enviados" />
+
+    </group>
+</menu>

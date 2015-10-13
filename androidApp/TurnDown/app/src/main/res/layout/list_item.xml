@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/upContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="9dp"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:id="@+id/subTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:text="@string/empty_subTask"
+            android:textSize="23sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/upContent"
+        android:layout_marginLeft="12dp"
+        android:orientation="horizontal"
+        android:paddingLeft="17dp">
+
+        <!-- <Button
+             android:id="@+id/photoBtn"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="7dp"
+             android:layout_marginRight="3dp"
+             android:text="@string/btn_photo" />-->
+
+
+        <FrameLayout
+            style="?android:attr/buttonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@color/resalta">
+
+            <Button
+                android:id="@+id/photoBtn"
+                style="@style/captionOnly"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/camarita"
+                android:gravity="center"
+                android:text="photo" />
+        </FrameLayout>
+
+        <!--<Button
+            android:id="@+id/subTaskBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:drawableRight="@drawable/add_white"
+            android:text="add"
+            android:paddingRight="5dp"
+            android:paddingEnd="5dp" />-->
+
+        <FrameLayout
+            style="?android:attr/buttonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@color/bajito">
+
+            <Button
+                android:id="@+id/subTaskBtn"
+                style="@style/captionOnly"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/agrega_big"
+                android:gravity="center"
+                android:text="note" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="?android:attr/buttonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@color/oscurito">
+
+            <Button
+                android:id="@+id/deleteBtn"
+                style="@style/captionOnly"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/delete_job"
+                android:gravity="center"
+                android:text="delete" />
+        </FrameLayout>
+
+
+        <!--<Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X" />-->
+
+    </LinearLayout>
+
+
+</RelativeLayout>

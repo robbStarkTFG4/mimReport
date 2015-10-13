@@ -1,0 +1,67 @@
+
+
+- arreglar bug en enviados de los checklist al borrar se selecciona otro que ni al caso.
+
+
+- agregar opcion de seleccionar todos.
+
+
+-- dialogs with edittest should show keyboard on focus
+
+-- cerrar async tareas en caso que el usuario salga de la aplicasion
+
+-- arreglar lo de eliminar imagenes en imageViewDialog, cerrar dialogo hasta que no existan imagenes en la lista de Job.
+
+-- future if needed
+
+-upload image to backEnd using a service [refactor all the code of the upload to the service]
+
+- then send report object to server persist with status 0 for backEnd
+- get report objet from the server wich will have all the ids of report and Jobs and task objects
+
+- agregar en el backbutton del hardware antes de cerrar la app, dialogo para guardar el reporte.
+
+
+greenDA0
+
+50
+
+future release->   arrancar suave variable frecuency driver 75 hp
+
+http://stackoverflow.com/questions/29144367/file-path-return-null-always-in-lollipop-android sadasdasdsa
+
+http://comment-cdn.9gag.com/image?ref=9gag.tv#http://img-comment-fun.9cache.com/media/ap0b6RE/aQ42qNDq_700wa_0.gif
+
+
+/////// MimReportBackEnd
+
+http://contactrest-contactres.rhcloud.com/restfull5/webresources/generic
+
+
+http://mimservice-contactres.rhcloud.com/MimReportBackEnd/webresources/generic/usuarios
+
+http://vertx.io/blog/my-first-vert-x-3-application/index.html
+
+http://dexpage.com/uploading-compress-image-to-server-using-retrofit/
+
+----------------------------------------- OPENSHIFT--------
+
+Connection URL: mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/
+
+  Root User: adminEECyvFE
+  Root Password: CynDeNreiS4d
+Database Name: mimservice
+
+   <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.5.254.2:3306/mimservice"/>
+            <property name="javax.persistence.jdbc.user" value="adminEECyvFE"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.password" value="CynDeNreiS4d"/>
+
+-------------------------------- LOCAL -------------------------------------------
+
+Local URL : mysql://localhost:3306/mimreportdb?zeroDateTimeBehavior=convertToNull
+
+   <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mimservice?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>

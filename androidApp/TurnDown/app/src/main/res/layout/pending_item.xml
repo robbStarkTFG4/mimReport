@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="7dp">
+
+        <TextView
+            android:id="@+id/labelTrabajoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:padding="7dp"
+            android:text="Trabajo: "
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/jobView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:padding="7dp"
+            android:text="pd-4233"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingTop="7dp">
+
+        <TextView
+            android:id="@+id/labelSitoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:padding="7dp"
+            android:text="Sitio: "
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/sitioView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:padding="7dp"
+            android:text="banda agregados"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>

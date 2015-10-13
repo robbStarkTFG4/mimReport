@@ -1,0 +1,94 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.nore.turndown.fragments.RegisterAccount">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:text="Usuario"
+            android:textSize="15sp" />
+
+
+        <EditText
+            android:id="@+id/userField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="7dp"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:text="@string/nombreRegLabel"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/nombreField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="7dp"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:text="@string/apellidoPaterno"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/paternoField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="7dp"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:text="@string/apellidoMaRegLabel"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/maternoField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="7dp"
+            android:inputType="text" />
+
+        <Button
+            android:padding="10dp"
+            android:background="@color/resalta"
+            android:textColor="@color/secondary_texto"
+            android:id="@+id/saveDataForm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:text="Guardar datos" />
+
+
+    </LinearLayout>
+</ScrollView>
