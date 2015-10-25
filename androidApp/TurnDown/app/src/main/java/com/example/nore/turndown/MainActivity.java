@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity
 
     private ReportFragment reportFrag;
 
+    private int fragmentPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +140,21 @@ public class MainActivity extends AppCompatActivity
 
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        //changeFragment(position);
+        fragmentPosition = position;
+        if (reportFrag != null) {
+            reportFrag.triggerActionFromDrawer();
+        } else {
+            performChange();
+        }
+
+    }
+
+    public void performChange() {
+        changeFragment(fragmentPosition);
+    }
+
+    private void changeFragment(int position) {
         if (!lostFocus) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment obj = null;
@@ -190,64 +207,19 @@ public class MainActivity extends AppCompatActivity
                     .show();
             //  Toast.makeText(this, "Operacion en proceso espera un momento.....", Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override
     public void onBackPressed() {
         if (reportFrag != null) {
-            if (!reportFrag.performSave()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Warn");
-                builder.setMessage("Guardar reporte?");
-                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO
-                        if (reportFrag != null) {
-                            dialog.dismiss();
-                            reportFrag.destroyFragment();
-                            reportFrag.triggerAction();
-
-
-                            switch (reportFrag.actionControl()) {
-                                case 0:
-                                    MainActivity.super.onBackPressed();
-                                    break;
-                                case 1:
-                                    MainActivity.this.finish();
-                                    break;
-                                case 3:
-                                    break;
-
-                            }
-
-                        }
-                    }
-                });
-                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //TODO
-                        dialog.dismiss();
-                        reportFrag.destroyFragment();
-                        switch (reportFrag.actionControl()) {
-                            case 0:
-                                MainActivity.super.onBackPressed();
-                                break;
-                            case 1:
-                                MainActivity.this.finish();
-                                break;
-                            case 3:
-                                break;
-                        }
-
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
+            reportFrag.triggerAction();
         } else {
-            MainActivity.super.onBackPressed();
+            super.onBackPressed();
         }
+    }
+
+    public void backEvent() {
+        super.onBackPressed();
     }
 
     public void onSectionAttached(int number) {
@@ -324,6 +296,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void allowed(boolean res) {
         lostFocus = res;
+    }
+
+    @Override
+    public void processBackEvent() {
+        backEvent();
     }
 
 

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.example.nore.turndown.CustomListView.ExpandableCustomAdapter;
 import com.example.nore.turndown.R;
 import com.example.nore.turndown.customCamera.CameraPreview;
 import com.example.nore.turndown.entity.dao.ImageInfo;
@@ -32,6 +33,9 @@ import java.util.Random;
  * Created by NORE on 15/08/2015.
  */
 public class CameraDialog extends DialogFragment {
+
+    private CustomDialogFrag.SaverMedium save;
+
     public static CameraDialog newInstance(Job job) {
         CameraDialog f = new CameraDialog();
 
@@ -83,9 +87,12 @@ public class CameraDialog extends DialogFragment {
                         }
                     }
                 }
+                if (save != null) {
+                    save.notifySave();
+                }
                 mCamera.stopPreview();
                 mCamera.release();
-                mCamera=null;
+                mCamera = null;
                 CameraDialog.this.dismiss();
             }
         });
@@ -109,7 +116,7 @@ public class CameraDialog extends DialogFragment {
                 }.execute();
                 mCamera.stopPreview();
                 mCamera.release();
-                mCamera=null;
+                mCamera = null;
                 CameraDialog.this.dismiss();
             }
         });
@@ -178,10 +185,14 @@ public class CameraDialog extends DialogFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(mCamera!=null){
+        if (mCamera != null) {
             mCamera.stopPreview();
             mCamera.release();
-            mCamera=null;
+            mCamera = null;
         }
+    }
+
+    public void setSave(CustomDialogFrag.SaverMedium save) {
+        this.save = save;
     }
 }

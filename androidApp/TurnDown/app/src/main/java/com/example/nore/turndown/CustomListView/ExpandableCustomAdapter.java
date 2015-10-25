@@ -43,7 +43,12 @@ import java.util.Random;
 /**
  * Created by NORE on 03/07/2015.
  */
-public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
+public class ExpandableCustomAdapter extends BaseExpandableListAdapter implements CustomDialogFrag.SaverMedium {
+
+
+    public interface CouplerSaver {
+        public void notifyFragmentSmartSave();
+    }
 
     public interface ObjectFacilitator {
         public void selectedJob(Job job, String title);
@@ -61,6 +66,8 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
     private WatchMen watch;
     private int currentPos;
     private Dialog dialogo;
+    private boolean smartSave = false;
+    private CouplerSaver couplerSaver;
 
     public ExpandableCustomAdapter(Context context, List<Job> objects) {
         this.context = context;
@@ -155,11 +162,13 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
                 Portable port = new Portable(viewHolder.task);
 
                 CustomDialogFrag newFragment = CustomDialogFrag.newInstance(1, job, port);
+                newFragment.setSaver(ExpandableCustomAdapter.this);
                 newFragment.show(((Activity) context).getFragmentManager(), "dialog");
+
 
             }
         });
-        
+
         viewHolder.photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +230,7 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
                 TaskJob task = new TaskJob();
                 task.setDescripcion("Nota...");
                 list.add(task);
+                notifyChange();
                 notifyDataSetChanged();
                 return true;
             }
@@ -238,6 +248,7 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
                         watch.deletedJob(groupPosition);
                         objects.remove(groupPosition);
                         notifyDataSetChanged();
+                        notifyChange();
                         dialog.dismiss();
                     }
                 });
@@ -256,7 +267,13 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
-    private void takePicture(int groupPosition) {
+    private void notifyChange() {
+        if (couplerSaver != null) {
+            couplerSaver.notifyFragmentSmartSave();
+        }
+    }
+
+    private void takePicture(int groupPosition) { // here we can add implementation for newer phones
         //cameraIntent(groupPosition);
         cameraApiDeprecated(groupPosition);
     }
@@ -271,6 +288,7 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
 
 
         CameraDialog newFragment = CameraDialog.newInstance((Job) getGroup(groupPosition));
+        newFragment.setSave(this);
         newFragment.show(((Activity) context).getFragmentManager(), "cameraDialog");
     }
 
@@ -396,6 +414,16 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter {
         this.watch = watch;
     }
 
+    @Override
+    public void notifySave() {
+        if (couplerSaver != null) {
+            couplerSaver.notifyFragmentSmartSave();
+        }
+    }
+
+    public void setCouplerSaver(CouplerSaver couplerSaver) {
+        this.couplerSaver = couplerSaver;
+    }
     // util
 
 

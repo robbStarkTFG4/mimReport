@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.nore.turndown.CustomListView.ExpandableCustomAdapter;
 import com.example.nore.turndown.fragments.AddJobFragment;
 import com.example.nore.turndown.R;
 import com.example.nore.turndown.entity.dao.TaskJob;
@@ -17,6 +18,8 @@ import com.example.nore.turndown.entity.dao.TaskJob;
  * Created by NORE on 04/07/2015.
  */
 public class CustomDialogSubTask extends DialogFragment {
+
+    private ExpandableCustomAdapter.CouplerSaver save;
 
     public static CustomDialogSubTask newInstance(int num, TaskJob job, AddJobFragment.subTaskPort port) {
         CustomDialogSubTask f = new CustomDialogSubTask();
@@ -37,12 +40,16 @@ public class CustomDialogSubTask extends DialogFragment {
         final TaskJob jo = (TaskJob) getArguments().getSerializable("task");
         final AddJobFragment.subTaskPort port = (AddJobFragment.subTaskPort) getArguments().getSerializable("port");
 
+
         View root = inflater.inflate(R.layout.sub_task_dialog, null);
         final EditText edit = (EditText) root.findViewById(R.id.descriptionSubTaskArea);
         Button btnAceptar = (Button) root.findViewById(R.id.btnAceptarSubTask);
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (save != null) {
+                    save.notifyFragmentSmartSave();
+                }
                 String sub = edit.getText().toString();
                 jo.setDescripcion(sub);
                 port.subTextView.setText(sub);
@@ -53,5 +60,9 @@ public class CustomDialogSubTask extends DialogFragment {
         getDialog().setTitle("Escribe Nota");
 
         return root;
+    }
+
+    public void setSave(ExpandableCustomAdapter.CouplerSaver save) {
+        this.save = save;
     }
 }

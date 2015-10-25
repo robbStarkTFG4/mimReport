@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +33,7 @@ import com.example.nore.turndown.backEnd.ConvertManager;
 import com.example.nore.turndown.backEnd.models.Reporte2;
 import com.example.nore.turndown.backEnd.models.Trabajo;
 import com.example.nore.turndown.backEnd.services.ReportService;
+import com.example.nore.turndown.customDialog.CustomDialogFrag;
 import com.example.nore.turndown.customDialog.CustomDialogSubTask;
 import com.example.nore.turndown.entity.dao.DaoSession;
 import com.example.nore.turndown.entity.dao.ImageInfo;
@@ -68,9 +72,10 @@ import retrofit.client.Response;
  */
 public class AddJobFragment extends Fragment implements LoadReport, UpdateReport, SaveListener
         , CompressImageTask.CompressState, CompressImageTask2.CompressState2, SendImageTask.ImageUpload
-        , ExpandableCustomAdapter.WatchMen, ReportBuilder, ReportFragment {
+        , ExpandableCustomAdapter.WatchMen, ReportBuilder, ReportFragment, ExpandableCustomAdapter.CouplerSaver {
 
     private int controller = 0;
+    private boolean smartSave = false;
 
     @Override
     public void buildResult(boolean res) {
@@ -87,8 +92,15 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         }
     }
 
+    @Override
+    public void notifyFragmentSmartSave() {
+        smartSave = true;
+    }
+
     public interface TransitionCommunicator {
         public void allowed(boolean res);
+
+        public void processBackEvent();
     }
 
     private TransitionCommunicator trans;
@@ -162,7 +174,39 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
     private void setUpWidgets(View root) {
         jobField = (EditText) root.findViewById(R.id.jobField);
+        jobField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                smartSave = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                smartSave = true;
+            }
+        });
         locationField = (EditText) root.findViewById(R.id.sitioField);
+        locationField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                smartSave = true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void verifyUser() {
@@ -223,6 +267,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
             adapter = new ExpandableCustomAdapter(getActivity(), list);
             adapter.setFacil((MainActivity) getActivity());
             adapter.setWatch(this);
+            adapter.setCouplerSaver(this);
 
             listView = (ExpandableListView) root.findViewById(R.id.jobList);
             listView.setAdapter(adapter);
@@ -234,7 +279,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                     TextView subText = (TextView) v.findViewById(R.id.descriptionTask);
                     FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
                     android.app.Fragment prev = getActivity().getFragmentManager()
-                            .findFragmentByTag(FragmentTags.SUB_TASK_DIALOG);
+                            .findFragmentByTag("subTaskDialog");
                     if (prev != null) {
                         ft.remove(prev);
                     }
@@ -247,6 +292,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
                     CustomDialogSubTask newFragment = CustomDialogSubTask.newInstance(1,
                             list.get(groupPosition).getTasks2().get(childPosition), subPort);
+                    newFragment.setSave(AddJobFragment.this);
                     newFragment.show(getActivity().getFragmentManager(), FragmentTags.SUB_TASK_DIALOG);
                     return false;
                 }
@@ -344,6 +390,20 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                     case 2:
                         launchReportBuilder();
                         break;
+                    case 3:
+                        smartSave = false;
+                        ((MainActivity) getActivity()).performChange();
+                        Snackbar
+                                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + idRep, Snackbar.LENGTH_LONG)
+                                .show();
+                        break;
+                    case 4:
+                        smartSave = false;
+                        ((MainActivity) getActivity()).backEvent();
+                        Snackbar
+                                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + idRep, Snackbar.LENGTH_LONG)
+                                .show();
+                        break;
                 }
             }
         } else {
@@ -375,6 +435,13 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                         break;
                     case 2:
                         launchReportBuilder();
+                        break;
+                    case 3:
+                        smartSave = false;
+                        ((MainActivity) getActivity()).performChange();
+                        Snackbar
+                                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + id, Snackbar.LENGTH_LONG)
+                                .show();
                         break;
                 }
             }
@@ -469,6 +536,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                 taskBlackList.add(list.get(item.getGroupId()).getTasks2().get(item.getItemId()));
                 list.get(item.getGroupId()).getTasks2().remove(item.getItemId());
                 adapter.notifyDataSetChanged();
+                smartSave = true;
                 break;
         }
         return super.onContextItemSelected(item);
@@ -521,7 +589,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         job.setTasks(taskList);
         list.add(job);
         adapter.notifyDataSetChanged();
-
+        smartSave = true;
         listView.post(new Runnable() {
             @Override
             public void run() {
@@ -838,8 +906,48 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        //Toast.makeText(getActivity(), "HOLA CRAYOLA!!!!!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     public void onDestroy() {
-        //Toast.makeText(getActivity(), "Preguntar para grabar", Toast.LENGTH_LONG).show();
+        super.onDestroy();
+        /*if (smartSave && report != null) {
+            Toast.makeText(getActivity(), "Grabar Automaticamente", Toast.LENGTH_LONG).show();
+            smartSave = false;
+        }
+
+
+        if (smartSave && (report == null)) {
+            smartSave = false;
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddJobFragment.this.getActivity());
+            builder.setTitle("Warn");
+            builder.setMessage("Descartar reporte?");
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    garbageAssets();
+                    AddJobFragment.super.onDestroy();
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //TODO
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else if (report == null) {
+            garbageAssets();
+            AddJobFragment.super.onDestroy();
+        } else {
+            AddJobFragment.super.onDestroy();
+        }*/
+    }
+
+    private void garbageAssets() {
         if (report == null) {
 
             Job[] jobs = new Job[list.size()];
@@ -851,7 +959,6 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         } else {
             //Toast.makeText(getActivity(), "Conservarlas", Toast.LENGTH_LONG).show();
         }
-        super.onDestroy();
     }
 
     @Override
@@ -980,8 +1087,79 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
     @Override
     public void triggerAction() {
-        should = 0;
-        persistReport();
+        should = 4;
+        // persistReport();
+        autoSave();
+
+
+        if (smartSave && (report == null)) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddJobFragment.this.getActivity());
+            builder.setTitle("Warn");
+            builder.setMessage("Guardar Reporte?");
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    persistReport();
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //TODO
+                    dialog.dismiss();
+                    garbageAssets();
+                    ((MainActivity) getActivity()).backEvent();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else if (report == null) {
+            ((MainActivity) getActivity()).backEvent();
+        } else {
+            ((MainActivity) getActivity()).backEvent();
+        }
+
+    }
+
+    @Override
+    public void triggerActionFromDrawer() {
+        should = 3;
+        // persistReport();
+        autoSave();
+
+
+        if (smartSave && (report == null)) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddJobFragment.this.getActivity());
+            builder.setTitle("Warn");
+            builder.setMessage("Guardar Reporte?");
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    persistReport();
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //TODO
+                    garbageAssets();
+                    dialog.dismiss();
+                    ((MainActivity) getActivity()).performChange();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else if (report == null) {
+            ((MainActivity) getActivity()).performChange();
+        } else {
+            ((MainActivity) getActivity()).performChange();
+        }
+
+    }
+
+    private void autoSave() {
+        if (smartSave && report != null) {
+            Toast.makeText(getActivity(), "Grabar Automaticamente", Toast.LENGTH_LONG).show();
+            persistReport();
+        }
     }
 
     @Override

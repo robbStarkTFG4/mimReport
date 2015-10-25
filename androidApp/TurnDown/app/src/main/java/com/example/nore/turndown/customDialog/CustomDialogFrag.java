@@ -25,6 +25,12 @@ import com.example.nore.turndown.entity.dao.Job;
 public class CustomDialogFrag extends DialogFragment {
 
 
+    public interface SaverMedium {
+        public void notifySave();
+    }
+
+    private SaverMedium saver;
+
     public static CustomDialogFrag newInstance(int num, Job job, ExpandableCustomAdapter.Portable port) {
         CustomDialogFrag f = new CustomDialogFrag();
 
@@ -52,6 +58,10 @@ public class CustomDialogFrag extends DialogFragment {
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (saver != null) {
+                    saver.notifySave();
+                }
                 String description = edit.getText().toString();
                 jo.setJob(description);
 
@@ -66,4 +76,7 @@ public class CustomDialogFrag extends DialogFragment {
         return root;
     }
 
+    public void setSaver(SaverMedium saver) {
+        this.saver = saver;
+    }
 }

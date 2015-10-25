@@ -11,5 +11,7 @@ public interface ReportFragment {
 
     public void triggerAction();
 
+    public void triggerActionFromDrawer();
+
     public boolean performSave();
 }
