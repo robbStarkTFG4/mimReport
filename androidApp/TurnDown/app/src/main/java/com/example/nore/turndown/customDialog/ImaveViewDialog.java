@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.nore.turndown.R;
 import com.example.nore.turndown.entity.dao.ImageInfo;
@@ -70,6 +71,7 @@ public class ImaveViewDialog extends DialogFragment {
         View root = inflater.inflate(R.layout.img_drialog, null);
 
         final ImageView img = (ImageView) root.findViewById(R.id.jobImage);
+        final VideoView video = (VideoView) root.findViewById(R.id.videoView);
 
         DisplayMetrics metrics = new DisplayMetrics();
 
@@ -111,7 +113,7 @@ public class ImaveViewDialog extends DialogFragment {
                         }
                         if (size > 0) {
                             handleDeletedImagefinal(target, imagen, jo);
-                            switchImage(index, jo, img);
+                            switchImage(index, jo, img, video);
                         } else {
                             //Toast.makeText(getActivity(), "entre aqui", Toast.LENGTH_LONG).show();
                             handleDeletedImagefinal(target, imagen, jo);
@@ -130,7 +132,6 @@ public class ImaveViewDialog extends DialogFragment {
         });
 
 
-
         LinearLayout rightBtn = (LinearLayout) root.findViewById(R.id.swipeRight);
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +140,7 @@ public class ImaveViewDialog extends DialogFragment {
                 if (index > size) {
                     index = 0;
                 }
-                switchImage(index, jo, img);
+                switchImage(index, jo, img, video);
             }
         });
 
@@ -151,7 +152,7 @@ public class ImaveViewDialog extends DialogFragment {
                 if (index < 0) {
                     index = size;
                 }
-                switchImage(index, jo, img);
+                switchImage(index, jo, img, video);
             }
         });
 
@@ -176,7 +177,7 @@ public class ImaveViewDialog extends DialogFragment {
         jo.getImageInfo2().remove(target);
     }
 
-    private void switchImage(int index, Job jo, ImageView img) {
+    private void switchImage(int index, Job jo, ImageView img, VideoView video) {
 
         DisplayMetrics metrics = new DisplayMetrics();
 
@@ -187,11 +188,22 @@ public class ImaveViewDialog extends DialogFragment {
 
         File fil = new File(jo.getImageInfo2().get(index).getImgRoute());//------------- //begin old code
         if (fil.exists()) {
-            Picasso.with(getActivity()).load(fil).memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .resize((int) (metrics.widthPixels * .75)// fil as parameter
-                            , (int) (metrics.heightPixels * .50)) // instead of Uri was file path in ExpandableCustomAdp
-                    .into(img);
 
+            if (jo.getImageInfo2().get(index).getType().compareTo(1) == 0) {
+                img.setVisibility(View.VISIBLE);
+                Picasso.with(getActivity()).load(fil).memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .resize((int) (metrics.widthPixels * .75)// fil as parameter
+                                , (int) (metrics.heightPixels * .50)) // instead of Uri was file path in ExpandableCustomAdp
+                        .into(img);
+                video.setVisibility(View.GONE);
+            } else {
+                //videoViewCode
+                Toast.makeText(getActivity(), "inserta codigo video", Toast.LENGTH_LONG).show();
+                img.setVisibility(View.GONE);
+                video.setVisibility(View.VISIBLE);
+                video.setVideoPath(jo.getImageInfo2().get(index).getImgRoute());
+                video.start();
+            }
 
         } else {
             Toast.makeText(getActivity(), "No existe: -> " + jo.getImageInfo2().get(index).getImgRoute(), Toast.LENGTH_LONG).show();

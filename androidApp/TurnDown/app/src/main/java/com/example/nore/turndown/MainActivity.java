@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         setupDrawerLayout();
 
         try {
-            DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "mimDb12", null);
+            DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this, "mimDb13", null);
             db = openHelper.getWritableDatabase();
             master = new DaoMaster(db);
             session = master.newSession();

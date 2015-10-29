@@ -36,6 +36,8 @@ import java.util.Random;
 /**
  * Created by NORE on 15/08/2015.
  */
+
+// imagenes son tipo 1 , videos tipo 2
 public class CameraDialog extends DialogFragment {
 
     private CustomDialogFrag.SaverMedium save;
@@ -169,7 +171,30 @@ public class CameraDialog extends DialogFragment {
     }
 
     private void videoPersist(Job jb) {
+        if (rutaImagen != null) {
+            if (jb != null) {
+                List<ImageInfo> list = jb.getImageInfo2();
+                if (list != null) {
+                    ImageInfo img = new ImageInfo();
+                    img.setImgRoute(rutaImagen);
+                    img.setType(2);
+                    list.add(img);
+                } else {
+                    list = new ArrayList<>();
+                    ImageInfo img = new ImageInfo();
+                    img.setImgRoute(rutaImagen);
+                    img.setType(2);
+                    list.add(img);
 
+                    if (jb.getImageInfo2() == null) {
+                        jb.setImageInfo(list);
+                    }
+                }
+            }
+        }
+        if (save != null) {
+            save.notifySave();
+        }
     }
 
     private void imagePersist(Job jb) {
@@ -179,11 +204,13 @@ public class CameraDialog extends DialogFragment {
                 if (list != null) {
                     ImageInfo img = new ImageInfo();
                     img.setImgRoute(rutaImagen);
+                    img.setType(1);
                     list.add(img);
                 } else {
                     list = new ArrayList<>();
                     ImageInfo img = new ImageInfo();
                     img.setImgRoute(rutaImagen);
+                    img.setType(1);
                     list.add(img);
 
                     if (jb.getImageInfo2() == null) {
@@ -336,6 +363,7 @@ public class CameraDialog extends DialogFragment {
         recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
         recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
 
+        rutaImagen = file.getPath();
         //recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         //recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         CamcorderProfile cpHigh = CamcorderProfile

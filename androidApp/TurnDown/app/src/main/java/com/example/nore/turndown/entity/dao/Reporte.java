@@ -1,6 +1,5 @@
 package com.example.nore.turndown.entity.dao;
 
-import java.io.Serializable;
 import java.util.List;
 
 import de.greenrobot.dao.DaoException;
@@ -10,7 +9,7 @@ import de.greenrobot.dao.DaoException;
 /**
  * Entity mapped to table REPORTE.
  */
-public class Reporte implements Serializable {
+public class Reporte {
 
     private Long id;
     /**
@@ -127,10 +126,6 @@ public class Reporte implements Serializable {
     /**
      * To-one relationship, resolved on first access.
      */
-    public Usuario getUsuario2() {
-        return this.usuario;
-    }
-
     public Usuario getUsuario() {
         long __key = this.userId;
         if (usuario__resolvedKey == null || !usuario__resolvedKey.equals(__key)) {
@@ -147,10 +142,6 @@ public class Reporte implements Serializable {
         return usuario;
     }
 
-    public void setUsuario2(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public void setUsuario(Usuario usuario) {
         if (usuario == null) {
             throw new DaoException("To-one property 'userId' has not-null constraint; cannot set to-one to null");
@@ -160,10 +151,6 @@ public class Reporte implements Serializable {
             userId = usuario.getId();
             usuario__resolvedKey = userId;
         }
-    }
-
-    public List<Job> getJobs2() {
-        return jobs;
     }
 
     /**
@@ -222,9 +209,19 @@ public class Reporte implements Serializable {
         myDao.refresh(this);
     }
 
-    public void setJobsList(List<Job> jobsList) {
-        this.jobs = jobsList;
+    public Usuario getUsuario2() {
+        return usuario;
     }
 
+    public List<Job> getJobs2() {
+        return jobs;
+    }
 
+    public void setUsuario2(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setJobsList(List<Job> list) {
+        this.jobs = list;
+    }
 }

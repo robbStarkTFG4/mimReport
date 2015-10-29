@@ -1,6 +1,5 @@
 package com.example.nore.turndown.entity.dao;
 
-import java.io.Serializable;
 
 import de.greenrobot.dao.DaoException;
 
@@ -8,11 +7,12 @@ import de.greenrobot.dao.DaoException;
 /**
  * Entity mapped to table IMAGE_INFO.
  */
-public class ImageInfo implements Serializable {
+public class ImageInfo {
 
     private Long id;
     private String imgRoute;
     private String compressedImage;
+    private Integer type;
     private java.util.Date date;
     private long jobId;
 
@@ -33,10 +33,11 @@ public class ImageInfo implements Serializable {
         this.id = id;
     }
 
-    public ImageInfo(Long id, String imgRoute, String compressedImage, java.util.Date date, long jobId) {
+    public ImageInfo(Long id, String imgRoute, String compressedImage, Integer type, java.util.Date date, long jobId) {
         this.id = id;
         this.imgRoute = imgRoute;
         this.compressedImage = compressedImage;
+        this.type = type;
         this.date = date;
         this.jobId = jobId;
     }
@@ -69,6 +70,14 @@ public class ImageInfo implements Serializable {
 
     public void setCompressedImage(String compressedImage) {
         this.compressedImage = compressedImage;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public java.util.Date getDate() {

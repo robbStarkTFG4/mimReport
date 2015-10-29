@@ -40,43 +40,46 @@ public class CompressImageTask2 extends AsyncTask<Job, Integer, Boolean> {
                 if (!list.isEmpty()) {
                     for (int i = 0; i < list.size(); i++) {
                         ImageInfo inf = list.get(i);
-                        if (inf.getImgRoute() != null) {
-                            if (inf.getCompressedImage() == null) {
-                                Bitmap bit = BitmapFactory.decodeFile(inf.getImgRoute());
-                                if (bit != null) {
-                                    try {
-                                        // SAVE IMAGE NAME TO OBJECT
-                                        Random r = new Random();
-                                        int i1 = r.nextInt(200 - 70) + 17;
-                                        int i2 = r.nextInt(67 - 12) - 6;
-                                        int i3 = r.nextInt(82 - 24) - 6;
-                                        String photoTitle = "JPEG_" + i1 + i2 + "compressed_" + i3;
+                        if (inf.getType().compareTo(1) == 0) {
+                            if (inf.getImgRoute() != null) {
+                                if (inf.getCompressedImage() == null) { // aqui identifico si es video o imagen si pasa es imagen
+                                    Bitmap bit = BitmapFactory.decodeFile(inf.getImgRoute());
+                                    if (bit != null) {
+                                        try {
+                                            // SAVE IMAGE NAME TO OBJECT
+                                            Random r = new Random();
+                                            int i1 = r.nextInt(200 - 70) + 17;
+                                            int i2 = r.nextInt(67 - 12) - 6;
+                                            int i3 = r.nextInt(82 - 24) - 6;
+                                            String photoTitle = "JPEG_" + i1 + i2 + "compressed_" + i3;
 
-                                        File image = new File(Environment.
-                                                getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-                                                photoTitle + ".jpg");
+                                            File image = new File(Environment.
+                                                    getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+                                                    photoTitle + ".jpg");
 
-                                        OutputStream stream = new FileOutputStream(image);
-                                        bit.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-                                        stream.flush();
-                                        stream.close();
-                                        inf.setCompressedImage(image.getPath());
+                                            OutputStream stream = new FileOutputStream(image);
+                                            bit.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                                            stream.flush();
+                                            stream.close();
+                                            inf.setCompressedImage(image.getPath());
 
-                                        if (session != null) {
-                                            session.getJobDao().update(jb);
+                                            if (session != null) {
+                                                session.getJobDao().update(jb);
+                                            }
+
+                                        } catch (FileNotFoundException e) {
+                                            Log.d("TAG", e.getMessage());
+                                            return false;
+                                        } catch (IOException e) {
+                                            Log.d("TAG", e.getMessage());
+                                            return false;
                                         }
 
-                                    } catch (FileNotFoundException e) {
-                                        Log.d("TAG", e.getMessage());
-                                        return false;
-                                    } catch (IOException e) {
-                                        Log.d("TAG", e.getMessage());
-                                        return false;
                                     }
-
                                 }
                             }
                         }
+                        //end
                     }
                 }
             }

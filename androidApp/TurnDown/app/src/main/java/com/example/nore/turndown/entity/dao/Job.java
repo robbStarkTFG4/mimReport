@@ -1,7 +1,5 @@
 package com.example.nore.turndown.entity.dao;
 
-import com.example.nore.turndown.backEnd.models.Trabajo;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -119,10 +117,6 @@ public class Job implements Serializable {
         }
     }
 
-    public List<ImageInfo> getImageInfo2() {
-        return this.ImageInfo;
-    }
-
     /**
      * To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity.
      */
@@ -149,10 +143,6 @@ public class Job implements Serializable {
         ImageInfo = null;
     }
 
-    public List<TaskJob> getTasks2() {
-        return this.tasks;
-    }
-
     /**
      * To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity.
      */
@@ -170,10 +160,6 @@ public class Job implements Serializable {
             }
         }
         return tasks;
-    }
-
-    public void setTasks(List<TaskJob> tasks) {
-        this.tasks = tasks;
     }
 
     /**
@@ -213,7 +199,19 @@ public class Job implements Serializable {
         myDao.refresh(this);
     }
 
-    public void setImageInfo(List<ImageInfo> imageInfo) {
-        this.ImageInfo = imageInfo;
+    public List<ImageInfo> getImageInfo2() {
+        return ImageInfo;
+    }
+
+    public void setImageInfo(List<ImageInfo> list) {
+        this.ImageInfo = list;
+    }
+
+    public List<TaskJob> getTasks2() {
+        return tasks;
+    }
+
+    public void setTasks(List<TaskJob> taskList) {
+        this.tasks = taskList;
     }
 }

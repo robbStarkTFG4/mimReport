@@ -5,6 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.example.nore.turndown.entity.dao.ImageInfoDao;
+import com.example.nore.turndown.entity.dao.JobDao;
+import com.example.nore.turndown.entity.dao.ReporteDao;
+import com.example.nore.turndown.entity.dao.TaskJobDao;
+import com.example.nore.turndown.entity.dao.UsuarioDao;
+
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
