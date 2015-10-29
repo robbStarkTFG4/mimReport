@@ -1,4 +1,4 @@
-package com.example.nore.turndown.customCamera;
+package com.mim.marcoisaac.videorecord;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -29,18 +29,12 @@ public class CameraPreview extends SurfaceView implements
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        try {
-            mCamera.setPreviewDisplay(surfaceHolder);
-            mCamera.setDisplayOrientation(90);
-            mCamera.startPreview();
-        } catch (IOException e) {
-            // left blank for now
-        }
+        startPreview(surfaceHolder);
     }
 
-    public void resumePreview() {
+    private void startPreview(SurfaceHolder surfaceHolder) {
         try {
-            mCamera.setPreviewDisplay(this.mSurfaceHolder);
+            mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.setDisplayOrientation(90);
             mCamera.startPreview();
         } catch (IOException e) {
@@ -73,7 +67,7 @@ public class CameraPreview extends SurfaceView implements
         }
     }
 
-    public SurfaceHolder getmSurfaceHolder() {
+    public SurfaceHolder getSurfaceHolder() {
         return mSurfaceHolder;
     }
 }
