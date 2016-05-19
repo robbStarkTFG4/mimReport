@@ -78,7 +78,7 @@ public class CreteReportTask extends AsyncTask<Reporte, Void, Boolean> {
         //try {
         PdfWriter.getInstance(document,
                 new FileOutputStream(Environment.  //THIS WORKS
-                        getExternalStorageDirectory() + "/reportesMim" + "/" + t.getTrabajo() + "_" + t.getSitio() + ".pdf"));
+                        getExternalStorageDirectory() + "/reportesMim" + "/" +"linea_"+ t.getTrabajo() + "_" +"orden_"+ t.getSitio() + ".pdf"));
 
         document.open();
 
@@ -104,10 +104,10 @@ public class CreteReportTask extends AsyncTask<Reporte, Void, Boolean> {
 
         document.add(Chunk.NEWLINE);
 
-        document.add(new Phrase("Trabajo: ", font1));
+        document.add(new Phrase("Linea: ", font1));
         document.add(new Phrase(t.getTrabajo() + "  ", font2));
 
-        document.add(new Phrase("Sitio: ", font1));
+        document.add(new Phrase("# Orden: ", font1));
         document.add(new Phrase(t.getSitio() + "  ", font2));
 
         //document.add(new Chunk(new LineSeparator()));

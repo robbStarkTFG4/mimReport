@@ -20,11 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.nore.turndown.CustomListView.ExpandableCustomAdapter;
 import com.example.nore.turndown.MainActivity;
@@ -33,7 +31,6 @@ import com.example.nore.turndown.backEnd.ConvertManager;
 import com.example.nore.turndown.backEnd.models.Reporte2;
 import com.example.nore.turndown.backEnd.models.Trabajo;
 import com.example.nore.turndown.backEnd.services.ReportService;
-import com.example.nore.turndown.customDialog.CustomDialogFrag;
 import com.example.nore.turndown.customDialog.CustomDialogSubTask;
 import com.example.nore.turndown.entity.dao.DaoSession;
 import com.example.nore.turndown.entity.dao.ImageInfo;
@@ -99,7 +96,6 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
     public interface TransitionCommunicator {
         public void allowed(boolean res);
-
         public void processBackEvent();
     }
 
@@ -107,10 +103,9 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
     private View root;
     private ExpandableListView listView;
-    private List<Job> list;
+    private List<Job> jobList;
     private int listsize = 0;
     private int should = 0;
-    //private CustomAdapter adapter;
     private ExpandableCustomAdapter adapter;
     private Usuario usuario;
     private Reporte report = null;
@@ -163,7 +158,11 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         return root;
     }
 
-
+    /**
+     * Carga un reporte con "reportId" usando asynckTask, el resultado se va a procesar en el metodo
+     * "LoadReportResult(Reporte rep)
+     * @param reportId
+     */
     private void loadReport(Long reportId) {
         Long[] array = new Long[1];
         array[0] = reportId;
@@ -212,7 +211,6 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
     private void verifyUser() {
 
         UsuarioDao userDao = session.getUsuarioDao();
-        //userDao.insert(new Usuario());
         List<Usuario> userList = userDao.queryBuilder().where(UsuarioDao.Properties.ActiveUser.eq(true)).list();
         if (userList != null) {
             if ((userList.size() > 0)) {
@@ -220,7 +218,6 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                 Snackbar
                         .make(((MainActivity) getActivity()).getParentLayout(), "Usuario: " + usuario.getUsuario(), Snackbar.LENGTH_LONG)
                         .show();
-                //Toast.makeText(getActivity(), "Usuario: " + usuario.getUsuario(), Toast.LENGTH_LONG).show();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Warn");
@@ -255,16 +252,15 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
             if (blackList == null) {
                 blackList = new ArrayList<>();
             }
-            blackList.add(list.get(position));
-            //Toast.makeText(getActivity(), "Garbage: " + list.get(position).getJob(), Toast.LENGTH_LONG).show();
+            blackList.add(jobList.get(position));
         }
     }
 
     private void listViewConfig() {
 
-        if (list == null) {
-            list = new ArrayList<>();
-            adapter = new ExpandableCustomAdapter(getActivity(), list);
+        if (jobList == null) {
+            jobList = new ArrayList<>();
+            adapter = new ExpandableCustomAdapter(getActivity(), jobList);
             adapter.setFacil((MainActivity) getActivity());
             adapter.setWatch(this);
             adapter.setCouplerSaver(this);
@@ -284,14 +280,11 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                         ft.remove(prev);
                     }
                     ft.addToBackStack(null);
-
-                    // Create and show the dialog.
-                    //Portable port = new Portable(viewHolder.task);
                     subTaskPort subPort = new subTaskPort();
                     subPort.subTextView = subText;
 
                     CustomDialogSubTask newFragment = CustomDialogSubTask.newInstance(1,
-                            list.get(groupPosition).getTasks2().get(childPosition), subPort);
+                            jobList.get(groupPosition).getTasks2().get(childPosition), subPort);
                     newFragment.setSave(AddJobFragment.this);
                     newFragment.show(getActivity().getFragmentManager(), FragmentTags.SUB_TASK_DIALOG);
                     return false;
@@ -302,13 +295,17 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         }
     }
 
+    /**
+     * Metodo de interface  "LoadReport" que recibe un reporte cargado en una asyncTask
+     * @param rep
+     */
     @Override
     public void LoadReportResult(Reporte rep) {
         if (rep != null) {
             report = rep;
             jobField.setText(rep.getTrabajo());
             locationField.setText(rep.getSitio());
-            list.clear();
+            jobList.clear();
 
             for (int i = 0; i < report.getJobs2().size(); i++) {
                 Job jc = report.getJobs2().get(i);
@@ -337,7 +334,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                 }
 
 
-                jb.setImageInfo(infList);// added cloned list
+                jb.setImageInfo(infList);// added cloned jobList
 
                 //Build cloned task List
                 List<TaskJob> taskList = new ArrayList<>();
@@ -353,12 +350,12 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
                     taskList.add(task);
                 }
-                jb.setTasks(taskList);//added cloned list
-                list.add(jb);
+                jb.setTasks(taskList);//added cloned jobList
+                jobList.add(jb);
             }
 
-            //list.addAll(rep.getJobs2());
-            listsize = list.size();
+            //jobList.addAll(rep.getJobs2());
+            listsize = jobList.size();
             usuario = report.getUsuario();
 
             adapter.notifyDataSetChanged();
@@ -371,6 +368,11 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         }
     }
 
+    /**
+     *
+     * @param res
+     * @param idRep
+     */
     @Override
     public void updateResult(Boolean res, Long idRep) {
         if (res) {
@@ -378,9 +380,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                 switch (should) {
                     case 0:
                         //Toast.makeText(getActivity(), "Cambios guardados: " + idRep, Toast.LENGTH_SHORT).show();
-                        Snackbar
-                                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + idRep, Snackbar.LENGTH_LONG)
-                                .show();
+                        showMessage(idRep);
                         break;
                     case 1:
                         //sendReport(id); old paths
@@ -393,16 +393,12 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                     case 3:
                         smartSave = false;
                         ((MainActivity) getActivity()).performChange();
-                        Snackbar
-                                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + idRep, Snackbar.LENGTH_LONG)
-                                .show();
+                        showMessage(idRep);
                         break;
                     case 4:
                         smartSave = false;
                         ((MainActivity) getActivity()).backEvent();
-                        Snackbar
-                                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + idRep, Snackbar.LENGTH_LONG)
-                                .show();
+                        showMessage(idRep);
                         break;
                 }
             }
@@ -415,6 +411,12 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                 trans.allowed(false);
             }
         }
+    }
+
+    private void showMessage(Long idRep) {
+        Snackbar
+                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + idRep, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -439,9 +441,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                     case 3:
                         smartSave = false;
                         ((MainActivity) getActivity()).performChange();
-                        Snackbar
-                                .make(((MainActivity) getActivity()).getParentLayout(), "Cambios guardados: " + id, Snackbar.LENGTH_LONG)
-                                .show();
+                        showMessage(id);
                         break;
                 }
             }
@@ -470,7 +470,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
             Reporte rep = new Reporte();
 
             rep.setUsuario2(usuario);
-            rep.setJobsList(list);
+            rep.setJobsList(jobList);
 
             //save.setUsuario(usuario);
             rep.setTrabajo(jobDes);
@@ -498,14 +498,41 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
     private void setUpTestData() {
         Job job = new Job();
-        job.setJob("Descripcion...");
-
+        job.setJob("Paquete refacciones");
         List<TaskJob> taskList = new ArrayList<>();
         TaskJob task = new TaskJob();
-        task.setDescripcion("Nota...");
+        task.setDescripcion("refaccion # pzas");
         taskList.add(task);
         job.setTasks(taskList);
-        list.add(job);
+
+        Job job2 = new Job();
+        job2.setJob("Actividades ejecucion");
+        List<TaskJob> taskList2 = new ArrayList<>();
+        TaskJob task2 = new TaskJob();
+        task2.setDescripcion("cambio cadena");
+        taskList2.add(task2);
+        job2.setTasks(taskList2);
+
+        Job job3 = new Job();
+        job3.setJob("Cierre");
+        List<TaskJob> taskList3 = new ArrayList<>();
+        TaskJob task3 = new TaskJob();
+        task3.setDescripcion("observacion 1");
+        taskList3.add(task3);
+        job3.setTasks(taskList3);
+
+        Job job4 = new Job();
+        job4.setJob("Mejoras");
+        List<TaskJob> taskList4 = new ArrayList<>();
+        TaskJob task4 = new TaskJob();
+        task4.setDescripcion("mejora 1");
+        taskList4.add(task4);
+        job4.setTasks(taskList4);
+
+        jobList.add(job);
+        jobList.add(job2);
+        jobList.add(job3);
+        jobList.add(job4);
         adapter.notifyDataSetChanged();
     }
 
@@ -533,8 +560,8 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                 if (taskBlackList == null) {
                     taskBlackList = new ArrayList<>();
                 }
-                taskBlackList.add(list.get(item.getGroupId()).getTasks2().get(item.getItemId()));
-                list.get(item.getGroupId()).getTasks2().remove(item.getItemId());
+                taskBlackList.add(jobList.get(item.getGroupId()).getTasks2().get(item.getItemId()));
+                jobList.get(item.getGroupId()).getTasks2().remove(item.getItemId());
                 adapter.notifyDataSetChanged();
                 smartSave = true;
                 break;
@@ -587,7 +614,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         task.setDescripcion("Nota...");
         taskList.add(task);
         job.setTasks(taskList);
-        list.add(job);
+        jobList.add(job);
         adapter.notifyDataSetChanged();
         smartSave = true;
         listView.post(new Runnable() {
@@ -600,6 +627,9 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
     }
 
+    /**
+     * actualizar reporte o persister en db local
+     */
     private void persistReport() {
         if (report != null) {
             //Toast.makeText(, "Actualizando.. ", Toast.LENGTH_LONG).show();
@@ -617,6 +647,9 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         }
     }
 
+    /**
+     * Empieza secuencia para subir al servidor
+     */
     private void uploadToServer() {
 
 
@@ -668,9 +701,9 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         CompressImageTask2 imgTask2 = new CompressImageTask2();
         imgTask2.setCompress(this);
         imgTask2.setSession(session);
-        Job[] jbArray = new Job[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            jbArray[i] = list.get(i);
+        Job[] jbArray = new Job[jobList.size()];
+        for (int i = 0; i < jobList.size(); i++) {
+            jbArray[i] = jobList.get(i);
         }
         imgTask2.execute(jbArray);
     }
@@ -703,7 +736,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         reporteObj.setEstatus(0);
         reporteObj.setSitio(sitio);
         reporteObj.setTrabajo(trabajo);
-        reporteObj.setTrabajoList(ConvertManager.Convert(list));
+        reporteObj.setTrabajoList(ConvertManager.Convert(jobList));
 
         String us = usuario.getUsuario();
 
@@ -756,9 +789,9 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         imageTask.setReporteId(repId);
         imageTask.setRepServer(rep);
 
-        Job[] jbArray = new Job[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            jbArray[i] = list.get(i);
+        Job[] jbArray = new Job[jobList.size()];
+        for (int i = 0; i < jobList.size(); i++) {
+            jbArray[i] = jobList.get(i);
         }
         imageTask.execute(jbArray);
     }
@@ -787,7 +820,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         reporteObj.setSitio(sitio);
         reporteObj.setTrabajo(trabajo);
         //reporteObj.setFecha(new Date());
-        reporteObj.setTrabajoList(ConvertManager.Convert(list));
+        reporteObj.setTrabajoList(ConvertManager.Convert(jobList));
 
         String us = usuario.getUsuario();
 
@@ -825,7 +858,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         List<Trabajo> listTrabajo = rep.getTrabajoList();
         final int last = listTrabajo.get(listTrabajo.size() - 1).getIdtrabajo();
         for (int i = 0; i < listTrabajo.size(); i++) {
-            Job jb = list.get(i);
+            Job jb = jobList.get(i);
             final int id = listTrabajo.get(i).getIdtrabajo();
             if (!jb.getImageInfo2().isEmpty()) {
                 for (int k = 0; k < jb.getImageInfo2().size(); k++) {
@@ -869,7 +902,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         reporteObj.setSitio(sitio);
         reporteObj.setTrabajo(trabajo);
         //reporteObj.setFecha(new Date());
-        reporteObj.setTrabajoList(ConvertManager.Convert(list));
+        reporteObj.setTrabajoList(ConvertManager.Convert(jobList));
 
         String us = usuario.getUsuario();
 
@@ -950,9 +983,9 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
     private void garbageAssets() {
         if (report == null) {
 
-            Job[] jobs = new Job[list.size()];
-            for (int i = 0; i < list.size(); i++) {
-                jobs[i] = list.get(i);
+            Job[] jobs = new Job[jobList.size()];
+            for (int i = 0; i < jobList.size(); i++) {
+                jobs[i] = jobList.get(i);
             }
 
             new DeleteGarbage().execute(jobs);
@@ -966,6 +999,9 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         super.onPause();
     }
 
+    /**
+     * actualiza reporte existente
+     */
     private void updateReport() {
 
         String jobDes = jobField.getText().toString();
@@ -983,7 +1019,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
                 report.getJobs2().clear();
             }
 
-            report.setJobsList(list);
+            report.setJobsList(jobList);
 
             reps[0] = report;
             updater.update = this;
@@ -1010,7 +1046,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
             SaveTask save = new SaveTask();
             save.setSession(session);
-            save.setList(list);
+            save.setList(jobList);
             save.setUsuario(usuario);
             save.setJobDes(jobDes);
             save.setLocacion(locacion);
@@ -1028,8 +1064,8 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
         }
     }
 
-    public List<Job> getList() {
-        return list;
+    public List<Job> getJobList() {
+        return jobList;
     }
 
     public void setTrans(TransitionCommunicator trans) {
@@ -1157,7 +1193,7 @@ public class AddJobFragment extends Fragment implements LoadReport, UpdateReport
 
     private void autoSave() {
         if (smartSave && report != null) {
-            Toast.makeText(getActivity(), "Grabar Automaticamente", Toast.LENGTH_LONG).show();
+            //testToast.makeText(getActivity(), "Grabar Automaticamente", Toast.LENGTH_LONG).show();
             persistReport();
         }
     }

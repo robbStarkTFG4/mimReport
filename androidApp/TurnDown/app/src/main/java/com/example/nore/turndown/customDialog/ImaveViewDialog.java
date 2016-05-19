@@ -188,23 +188,24 @@ public class ImaveViewDialog extends DialogFragment {
 
         File fil = new File(jo.getImageInfo2().get(index).getImgRoute());//------------- //begin old code
         if (fil.exists()) {
+          //if(jo.getImageInfo2().get(index).getType()!=null) {
+             // if (jo.getImageInfo2().get(index).getType().compareTo(1) == 0) {
+                  img.setVisibility(View.VISIBLE);
+                  Picasso.with(getActivity()).load(fil).memoryPolicy(MemoryPolicy.NO_CACHE)
+                          .resize((int) (metrics.widthPixels * .75)// fil as parameter
+                                  , (int) (metrics.heightPixels * .50)) // instead of Uri was file path in ExpandableCustomAdp
+                          .into(img);
+                  video.setVisibility(View.GONE);
+             // } else {
+                  //videoViewCode
+                /*  Toast.makeText(getActivity(), "inserta codigo video", Toast.LENGTH_LONG).show();
+                  img.setVisibility(View.GONE);
+                  video.setVisibility(View.VISIBLE);
+                  video.setVideoPath(jo.getImageInfo2().get(index).getImgRoute());
+                  video.start();*/
 
-            if (jo.getImageInfo2().get(index).getType().compareTo(1) == 0) {
-                img.setVisibility(View.VISIBLE);
-                Picasso.with(getActivity()).load(fil).memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .resize((int) (metrics.widthPixels * .75)// fil as parameter
-                                , (int) (metrics.heightPixels * .50)) // instead of Uri was file path in ExpandableCustomAdp
-                        .into(img);
-                video.setVisibility(View.GONE);
-            } else {
-                //videoViewCode
-                Toast.makeText(getActivity(), "inserta codigo video", Toast.LENGTH_LONG).show();
-                img.setVisibility(View.GONE);
-                video.setVisibility(View.VISIBLE);
-                video.setVideoPath(jo.getImageInfo2().get(index).getImgRoute());
-                video.start();
-            }
-
+              //}
+         // }
         } else {
             Toast.makeText(getActivity(), "No existe: -> " + jo.getImageInfo2().get(index).getImgRoute(), Toast.LENGTH_LONG).show();
         }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.nore.turndown.CustomListView.ExpandableCustomAdapter;
 import com.example.nore.turndown.fragments.AddJobFragment;
@@ -47,6 +48,7 @@ public class CustomDialogSubTask extends DialogFragment {
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(),"nota agregada",Toast.LENGTH_LONG).show();
                 if (save != null) {
                     save.notifyFragmentSmartSave();
                 }

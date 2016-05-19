@@ -274,8 +274,8 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter implement
     }
 
     private void takePicture(int groupPosition) { // here we can add implementation for newer phones
-        //cameraIntent(groupPosition);
-        cameraApiDeprecated(groupPosition);
+        cameraIntent(groupPosition);
+        //cameraApiDeprecated(groupPosition);
     }
 
     private void cameraApiDeprecated(int groupPosition) {
@@ -320,28 +320,6 @@ public class ExpandableCustomAdapter extends BaseExpandableListAdapter implement
             }
         } else {
             Toast.makeText(context, "package manager es nulo", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public static Uri getImageContentUri(Context context, File imageFile) {
-        String filePath = imageFile.getAbsolutePath();
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{MediaStore.Images.Media._ID},
-                MediaStore.Images.Media.DATA + "=? ",
-                new String[]{filePath}, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
-        } else {
-            if (imageFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.DATA, filePath);
-                return context.getContentResolver().insert(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            } else {
-                return null;
-            }
         }
     }
 

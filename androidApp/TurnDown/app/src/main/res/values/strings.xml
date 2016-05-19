@@ -12,8 +12,8 @@
     <string name="action_example">Example action</string>
 
     <string name="action_settings">Settings</string>
-    <string name="jobTitle">Trabajo</string>
-    <string name="sitioLabel">Sitio</string>
+    <string name="jobTitle">Linea</string>
+    <string name="sitioLabel">Orden</string>
     <string name="btn_photo">Photo</string>
     <string name="empty_subTask">empty task</string>
     <string name="addSubTaskLabel">add subTask</string>

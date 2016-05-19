@@ -23,7 +23,7 @@
             android:id="@+id/jobField"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="escribe trabajo" />
+            android:hint="escribe linea" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,7 +48,7 @@
             android:id="@+id/sitioField"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="escribe sitio" />
+            android:hint="escribe numero orden" />
 
     </LinearLayout>
 

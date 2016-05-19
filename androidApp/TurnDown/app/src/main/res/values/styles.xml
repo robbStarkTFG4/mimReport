@@ -48,4 +48,6 @@
         <item name="android:background">@color/bar_back</item>
     </style>
 
+    <style name="lara" parent="Theme.AppCompat.Light.NoActionBar" />
+
 </resources>

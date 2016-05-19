@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.nore.turndown.CustomListView.ExpandableCustomAdapter;
 import com.example.nore.turndown.entity.dao.DaoMaster;
@@ -103,7 +104,6 @@ public class MainActivity extends AppCompatActivity
 
     private void initToolbar() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //toolbar.setNavigationIcon(new IconDrawable(this,MaterialIcons.md_view_headline));
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
@@ -158,16 +158,17 @@ public class MainActivity extends AppCompatActivity
         if (!lostFocus) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment obj = null;
+            String []names={"addJob","pending","enviados"};
+
             switch (position) {
                 case R.id.generate_report:
                     AddJobFragment objT = new AddJobFragment();
                     objT.setTrans(this);
                     reportFrag = objT;
 
-                    Fragment frag = fragmentManager.findFragmentByTag("addJob");
-                    if (frag != null) {
-                        fragmentManager.beginTransaction().remove(frag);
-                    }
+
+
+                   deleteAllFragments(names);
 
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, objT, "addJob")
@@ -176,11 +177,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.pending_report:
                     obj = new PendingFragment();
 
-                    Fragment frag1 = fragmentManager.findFragmentByTag("pending");
-                    if (frag1 != null) {
-                        fragmentManager.beginTransaction().remove(frag1);
-                    }
-
+                    deleteAllFragments(names);
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, obj, "pending")
                             .commit();
@@ -188,10 +185,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.delivered_report:
                     obj = new EnviadosFragment();
 
-                    Fragment frag2 = fragmentManager.findFragmentByTag("enviados");
-                    if (frag2 != null) {
-                        fragmentManager.beginTransaction().remove(frag2);
-                    }
+                    deleteAllFragments(names);
 
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, obj, "enviados")
@@ -206,6 +200,15 @@ public class MainActivity extends AppCompatActivity
                     .make(parent, "Operacion en proceso espera un momento.....", Snackbar.LENGTH_LONG)
                     .show();
             //  Toast.makeText(this, "Operacion en proceso espera un momento.....", Toast.LENGTH_LONG).show();
+        }
+    }
+    public void deleteAllFragments(String  [] frags){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        for(int i=0;i<frags.length;i++){
+            Fragment frag = fragmentManager.findFragmentByTag(frags[i]);
+            if (frag != null) {
+                fragmentManager.beginTransaction().remove(frag);
+            }
         }
     }
 
@@ -239,6 +242,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void selectedJob(Job job, String title) {
+        this.jb = job;
+        this.photoTitle = title;
+    }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -250,11 +259,13 @@ public class MainActivity extends AppCompatActivity
                     if (list != null) {
                         ImageInfo img = new ImageInfo();
                         img.setImgRoute(photoTitle);
+                        img.setType(1);
                         list.add(img);
                     } else {
                         list = new ArrayList<>();
                         ImageInfo img = new ImageInfo();
                         img.setImgRoute(photoTitle);
+                        img.setType(1);
                         list.add(img);
 
                         if (jb.getImageInfo2() == null) {
@@ -265,6 +276,9 @@ public class MainActivity extends AppCompatActivity
 
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
+                if(photoTitle!=null){
+                    Toast.makeText(this,"borra archivo",Toast.LENGTH_LONG).show();
+                }
             } else {
                 // Image capture failed, advise user
             }
@@ -285,12 +299,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void selectedJob(Job job, String title) {
-        this.jb = job;
-        this.photoTitle = title;
     }
 
     @Override

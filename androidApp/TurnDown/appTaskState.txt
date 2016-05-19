@@ -2,6 +2,9 @@ http://stackoverflow.com/questions/1817742/how-can-i-capture-a-video-recording-o
 http://examples.javacodegeeks.com/android/core/android-video-capture-example/
 http://developer.android.com/guide/topics/media/camera.html#capture-video
 
+http://stackoverflow.com/questions/5337505/android-capture-video-frame
+http://android-er.blogspot.mx/2013/05/get-image-frame-in-video-using.html
+
 - arreglar bug en enviados de los checklist al borrar se selecciona otro que ni al caso.
 
 

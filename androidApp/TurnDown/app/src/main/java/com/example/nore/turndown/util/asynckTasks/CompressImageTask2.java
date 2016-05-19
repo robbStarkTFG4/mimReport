@@ -40,9 +40,9 @@ public class CompressImageTask2 extends AsyncTask<Job, Integer, Boolean> {
                 if (!list.isEmpty()) {
                     for (int i = 0; i < list.size(); i++) {
                         ImageInfo inf = list.get(i);
-                        if (inf.getType().compareTo(1) == 0) {
+                        //if (inf.getType().compareTo(1) == 0) {
                             if (inf.getImgRoute() != null) {
-                                if (inf.getCompressedImage() == null) { // aqui identifico si es video o imagen si pasa es imagen
+                               // if (inf.getCompressedImage() == null) { // aqui identifico si es video o imagen si pasa es imagen
                                     Bitmap bit = BitmapFactory.decodeFile(inf.getImgRoute());
                                     if (bit != null) {
                                         try {
@@ -77,8 +77,8 @@ public class CompressImageTask2 extends AsyncTask<Job, Integer, Boolean> {
 
                                     }
                                 }
-                            }
-                        }
+                            //}
+                       // }
                         //end
                     }
                 }

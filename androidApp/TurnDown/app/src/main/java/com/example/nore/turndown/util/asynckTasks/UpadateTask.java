@@ -69,6 +69,7 @@ public class UpadateTask extends AsyncTask<Reporte, Void, Boolean> {
                                 } else {
                                     inf.setJob(currentJob);
                                     infDao.insert(inf);
+                                    Log.d("INSERTANDO IMAGEN", inf.getImgRoute());
                                 }
                             }
                         }
@@ -92,6 +93,7 @@ public class UpadateTask extends AsyncTask<Reporte, Void, Boolean> {
                                 ImageInfo inf = infList.get(n);
                                 inf.setJob(currentJob);
                                 infDao.insert(inf);
+
                             }
                         }
 
@@ -166,7 +168,9 @@ public class UpadateTask extends AsyncTask<Reporte, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        update.updateResult(aBoolean, idGenerated);
+        if(update!=null){
+            update.updateResult(aBoolean, idGenerated);
+        }
     }
 
     public void setSession(DaoSession session) {
